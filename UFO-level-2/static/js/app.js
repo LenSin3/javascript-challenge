@@ -1,24 +1,25 @@
 // from data.js
 var tableData = data;
 
-
-var dataList = data.filter(function (e) {
+// Filter tabledata to extract values for datetime, city, state, country, shape and comments
+var dataList = tableData.filter(function (e) {
   return (e.datetime || e.city || e.state || e.country || e.shape || e.comments);
 })
 console.table(dataList);
 var tbody =  d3.select("tbody");
 
-
- // BONUS: Refactor to use Arrow Functions!
-/*
-dataList.forEach((element) => {
-  var row = tbody.append("tr");
-  Object.entries(element).forEach(([key, value]) => {
-    var cell = row.append("td");
-    cell.text(value);
-  });
-}); 
-*/
+// Create function to display table
+var getData = (dataInput) => {
+  dataInput.forEach((element) => {
+    var row = tbody.append("tr");
+    Object.entries(element).forEach(([key, value]) => {
+      var cell = row.append("td");
+      cell.text(value);
+    });
+  }); 
+}
+// call getData function
+getData(dataList);
 
 // Select the button
 var button = d3.select("#filter-btn");
@@ -30,8 +31,6 @@ var form = d3.selectAll("#form");
 button.on("click", runEnter);
 form.on("submit",runEnter);
 
-var inputValue = "";
-
 // Create the function to run for both events
 function runEnter() {
 
@@ -42,86 +41,43 @@ function runEnter() {
 
   var inputElementDate = d3.select("#datetime");
   var inputElementCity = d3.select("#city");
-  var inputElementState = d3.select("#state");
-  var inputElementCountry = d3.select("#country");
-  var inputElementShape = d3.select("#shape");
-
- 
-
+  // var inputElementState = d3.select("#state");
+  // var inputElementCountry = d3.select("#country");
+  // var inputElementShape = d3.select("#shape");
 
   // Get the value property of the input element
-  if (inputElementDate) {
-     inputValue = inputElementDate.property("value");
-     console.log(inputValue);
-     var filteredData = dataList.filter(element => element.datetime === inputValue);
-     console.log(filteredData);
+  // Date Filter
+  var inputValueDate = inputElementDate.property("value").trim();
+  console.log(inputValueDate);
+  var filteredDataDate = dataList.filter(dataList => dataList.datetime === inputValueDate);
+  console.log(filteredDataDate);
 
-     filteredData.forEach((element) => {
-      var row = tbody.append("tr");
-      Object.entries(element).forEach(([key, value]) => {
-        var cell = row.append("td");
-        cell.text(value);
-      });
-    });
+  // City Filter
+  var inputValueCity = inputElementCity.property("value").toLowerCase().trim();
+  console.log(inputValueCity);
+  var filteredDataCity = dataList.filter(dataList => dataList.city === inputValueCity);
+  console.log(filteredDataCity);
+
+  // Combined Filter
+  var filteredDataCombined = dataList.filter(dataList => dataList.datetime === inputValueDate && dataList.city === inputValueCity);
+  console.log(filteredDataCombined);
+  
+
+  tbody.html("");
+
+  let response = {
+    filteredDataDate, filteredDataCity, filteredDataCombined
   };
 
-  if (inputElementCity) {
-    inputValue = inputElementCity.property("value");
-    console.log(inputValue);
-    var filteredData = dataList.filter(element => element.city === inputValue);
-    console.log(filteredData);
 
-    filteredData.forEach((element) => {
-      var row = tbody.append("tr");
-      Object.entries(element).forEach(([key, value]) => {
-        var cell = row.append("td");
-        cell.text(value);
-      });
-    });
+  if(response.filteredDataCombined.length !== 0) {
+      getData(filteredDataCombined);
+  }
+  else if(response.filteredDataCombined.length === 0 && ((response.filteredDataDate.length !== 0 || response.filteredDataCity.length !== 0))) {
+    getData(filteredDataDate) || getData(filteredDataCity);
+  }
+  else {
+        tbody.append("tr").append("td").text("There are no sightings for the current search criteria. Please try again!");
   };
 
-  if (inputElementState) {
-    inputValue = inputElementState.property("value");
-    console.log(inputValue);
-    var filteredData = dataList.filter(element => element.state === inputValue);
-    console.log(filteredData);
-
-    filteredData.forEach((element) => {
-      var row = tbody.append("tr");
-      Object.entries(element).forEach(([key, value]) => {
-        var cell = row.append("td");
-        cell.text(value);
-      });
-    });
-  };
-
-  if (inputElementCountry) {
-    inputValue = inputElementCountry.property("value");
-    console.log(inputValue);
-    var filteredData = dataList.filter(element => element.country === inputValue);
-    console.log(filteredData);
-
-    filteredData.forEach((element) => {
-      var row = tbody.append("tr");
-      Object.entries(element).forEach(([key, value]) => {
-        var cell = row.append("td");
-        cell.text(value);
-      });
-    });
-  };
-
-  if (inputElementShape) {
-    inputValue = inputElementShape.property("value");
-    console.log(inputValue);
-    var filteredData = dataList.filter(element => element.shape === inputValue);
-    console.log(filteredData);
-
-    filteredData.forEach((element) => {
-      var row = tbody.append("tr");
-      Object.entries(element).forEach(([key, value]) => {
-        var cell = row.append("td");
-        cell.text(value);
-      });
-    });
-  };
 }
