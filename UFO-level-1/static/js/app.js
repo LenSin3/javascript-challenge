@@ -47,7 +47,7 @@ function runEnter() {
 
 
   // Get the value property of the input element
-  var inputValue = inputValue = inputElementDate.property("value").trim();
+  var inputValue = inputElementDate.property("value").trim();
   console.log(inputValue);
   var filteredData = dataList.filter(dataList => dataList.datetime === inputValue);
   console.log(filteredData);
