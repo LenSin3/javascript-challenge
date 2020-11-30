@@ -16,7 +16,7 @@ This project consists of codes that create a dynamic table and allow users to fi
 
 * Use a date form in the HTML document and write JavaScript code that will listen for events and search through the `date/time` column to find rows that match user input.
 
-![UFO Level 1]("https://github.com/LenSin3/javascript-challenge/blob/main/UFO-level-1/ufo_level_1.png?raw=true")
+![UFO Level 1]()
 
 ### Level 2: Multiple Search Categories
 
